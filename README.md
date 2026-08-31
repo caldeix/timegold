@@ -31,7 +31,7 @@ Sin ese interruptor Chrome descarga directo a *Descargas* y además no sobrescri
 | **Día a día** | Todo vive en `localStorage`. Cada cambio se guarda al instante y sigue ahí al cerrar y reabrir. |
 | **Exportar** | Se abre el diálogo de guardado → eliges `datos/` → sobrescribes `tiempoesoro-datos.json`. |
 | **Importar** | Selector de archivo (se abre en la última carpeta usada). Valida el JSON antes de reemplazar nada. |
-| **Primera vez** | Si `localStorage` está vacío, arranca desde `datos.js`. |
+| **Primera vez** | Arranca **en blanco**. No hay datos de ejemplo: pulsa Configurar y crea tus actividades, o importa un JSON. |
 
 ### Límites que conviene conocer
 
@@ -42,7 +42,7 @@ Sin ese interruptor Chrome descarga directo a *Descargas* y además no sobrescri
 
 ### Por qué no escribe en `datos/` por su cuenta
 
-No es una carencia del código: desde `file://` el navegador **prohíbe** que JavaScript elija una ruta de guardado, escriba en una carpeta sin diálogo o lea un archivo que el usuario no haya seleccionado. Por eso `datos.js` se carga con `<script>` y no con `fetch()`, que está bloqueado por CORS con origen `null`.
+No es una carencia del código: desde `file://` el navegador **prohíbe** que JavaScript elija una ruta de guardado, escriba en una carpeta sin diálogo o lea un archivo que el usuario no haya seleccionado. Tampoco vale `fetch()` para leer el JSON al arrancar: con origen `null` está bloqueado por CORS. Por eso exportar pasa por el diálogo de descarga e importar por un `<input type="file">`.
 
 La API que sí permitiría autoguardado directo (File System Access) exige `localhost` o `https://`, es decir, un servidor. Queda descartada por diseño.
 
@@ -104,7 +104,6 @@ Pasear perro · Lunes 10:00 – 10:30
 | `modelo.js` | Rejilla, solapes y cómputo de las 168 h. **Sin DOM** |
 | `store.js` | Único punto que toca `localStorage` y archivos |
 | `app.js` | Render, modal y eventos. Nunca toca `localStorage` |
-| `datos.js` | Semilla inicial (6 categorías de ejemplo) |
 | `iconos.js` | Registro inline de los SVG |
 | `img/` | Los mismos 10 iconos como archivos sueltos |
 | `datos/` | Carpeta destino de export/import |

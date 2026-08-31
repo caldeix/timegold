@@ -86,12 +86,13 @@
     return d;
   }
 
-  /* localStorage -> si vacio o corrupto, DATOS_SEMILLA -> si falta, estado vacio.
+  /* localStorage -> si vacio o corrupto, estado vacio. No hay datos de ejemplo:
+   * la app arranca en blanco y el usuario crea sus propias actividades.
    *
    * En Chrome TODAS las paginas file:// comparten el origen "null" y por tanto el
    * mismo localStorage. Por eso la clave va prefijada y nunca se asume que lo
-   * encontrado sea nuestro: si no valida, se descarta y se arranca de la semilla
-   * en lugar de romper.
+   * encontrado sea nuestro: si no valida, se descarta y se arranca vacio en lugar
+   * de romper.
    */
   function cargar() {
     var crudo = null;
@@ -105,12 +106,9 @@
       try {
         var obj = JSON.parse(crudo);
         if (validar(obj).ok) return migrar(obj);
-      } catch (e) { /* corrupto: cae a la semilla */ }
+      } catch (e) { /* corrupto: se descarta y se arranca vacio */ }
     }
 
-    if (global.DATOS_SEMILLA && validar(global.DATOS_SEMILLA).ok) {
-      return migrar(JSON.parse(JSON.stringify(global.DATOS_SEMILLA)));
-    }
     return estadoVacio();
   }
 
