@@ -110,6 +110,9 @@
     $('resumen-grid').innerHTML = html ||
       '<div class="vacio">Sin actividades todavía. Pulsa Configurar para crear la primera.</div>';
 
+    // Sin actividades no hay nada que mirar: el boton Configurar reclama la atencion.
+    $('btn-configurar').classList.toggle('reclama', datos.actividades.length === 0);
+
     $('libre-icono').innerHTML = icono('cat-free');
 
     var v = $('libre-valor');
