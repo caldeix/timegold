@@ -6,12 +6,12 @@
 (function () {
   'use strict';
 
-  var DIAS_CORTOS  = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
-  var DIAS_LARGOS  = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+  var DIAS_CORTOS = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+  var DIAS_LARGOS = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
   var DIAS_INICIAL = ['L', 'M', 'X', 'J', 'V', 'S', 'D'];
 
   var PALETA = ['#4a6fa5', '#c2703d', '#7a5ea8', '#3f8f6b', '#c0504d',
-                '#c9a227', '#3d8ba8', '#a85e8c', '#6b8f3f', '#a8683d'];
+    '#c9a227', '#3d8ba8', '#a85e8c', '#6b8f3f', '#a8683d'];
 
   /* Hora por la que arranca la matriz. Las anteriores se van al final:
      con 6 el orden es 06:00 … 23:00, 00:00 … 05:00.
@@ -100,8 +100,8 @@
         + '<div class="fila-color" style="background:' + esc(a.color) + '"></div>'
         + '<div class="fila-icono">' + icono(a.icono) + '</div>'
         + '<div class="fila-txt">'
-        +   '<span class="fila-nombre">' + esc(a.nombre) + '</span>'
-        +   '<span class="fila-detalle">' + esc(Modelo.describirBloques(a)) + '</span>'
+        + '<span class="fila-nombre">' + esc(a.nombre) + '</span>'
+        + '<span class="fila-detalle">' + esc(Modelo.describirBloques(a)) + '</span>'
         + '</div>'
         + '<div class="fila-horas">' + Modelo.formatHoras(p.horasFijas) + '</div>'
         + '</div>';
@@ -176,6 +176,18 @@
       : DIAS_LARGOS[dIni] + ' ' + hIni + ' – ' + DIAS_LARGOS[dFin] + ' ' + hFin;
   }
 
+  /* Franja central de un tramo. El nombre se pinta UNA sola vez, en el medio,
+   no en cada media hora: un bloque de 1,5 h son 3 franjas y el nombre va en
+   la segunda. La semana es circular, asi que un tramo que cruza medianoche
+   -o el domingo hacia el lunes- tiene un centro perfectamente definido. */
+  function esCentroTramo(t, pos) {
+    if (!t) return false;
+    var TOTAL = Modelo.DIAS * Modelo.SLOTS_DIA;
+    if (t.completo) return pos === 0;
+    var largo = (t.fin - t.ini + TOTAL) % TOTAL;
+    return pos === (t.ini + Math.floor(largo / 2)) % TOTAL;
+  }
+
   /* Descripción de un ocupante: nombre + su tramo COMPLETO, no la media hora
      concreta sobre la que está el ratón. */
   function describirOcupante(calc, porId, pos, id) {
@@ -207,7 +219,19 @@
       return describirOcupante(calc, porId, pos, o.id);
     }).join('\n');
 
-    return '<div class="slot" style="' + esc(estilo) + '" title="' + esc(titulo) + '"></div>';
+    // Una etiqueta por ocupante y en el mismo orden que el degradado: el bloque
+    // largo a la izquierda, el corto que lo interrumpe a la derecha.
+    var etqs = ord.map(function (o) {
+      if (!esCentroTramo(calc.tramos[pos + '|' + o.id], pos)) return '';
+      var a = porId[o.id];
+      return esc(a ? a.nombre : '?');
+    });
+    var htmlEtq = etqs.join('') === '' ? '' : etqs.map(function (n) {
+      return '<span class="slot-etq">' + n + '</span>';
+    }).join('');
+
+    return '<div class="slot" style="' + esc(estilo) + '" title="' + esc(titulo) + '">'
+      + htmlEtq + '</div>';
   }
 
   /* ================================================================ */
@@ -251,11 +275,11 @@
         + '<span class="fila-icono">' + icono(a.icono) + '</span>'
         + '<span class="lista-nombre">' + esc(a.nombre) + '</span>'
         + '<span class="lista-acc">'
-        +   '<button type="button" class="mini" data-mover="-1" data-id="' + esc(a.id) + '" title="Subir"'
-        +     (i === 0 ? ' disabled' : '') + '>↑</button>'
-        +   '<button type="button" class="mini" data-mover="1" data-id="' + esc(a.id) + '" title="Bajar"'
-        +     (ultima ? ' disabled' : '') + '>↓</button>'
-        +   '<button type="button" class="mini del" data-borrar="' + esc(a.id) + '" title="Eliminar">✕</button>'
+        + '<button type="button" class="mini" data-mover="-1" data-id="' + esc(a.id) + '" title="Subir"'
+        + (i === 0 ? ' disabled' : '') + '>↑</button>'
+        + '<button type="button" class="mini" data-mover="1" data-id="' + esc(a.id) + '" title="Bajar"'
+        + (ultima ? ' disabled' : '') + '>↓</button>'
+        + '<button type="button" class="mini del" data-borrar="' + esc(a.id) + '" title="Eliminar">✕</button>'
         + '</span>'
         + '</div>';
     }).join('') || '<div class="vacio">Sin actividades.</div>';
@@ -287,44 +311,44 @@
 
       return '<div class="bloque" data-bloque="' + i + '">'
         + '<div class="bloque-cab">'
-        +   '<span>Bloque ' + (i + 1) + '</span>'
-        +   '<button type="button" class="mini del" data-quitar-bloque="' + i + '" title="Quitar bloque">✕</button>'
+        + '<span>Bloque ' + (i + 1) + '</span>'
+        + '<button type="button" class="mini del" data-quitar-bloque="' + i + '" title="Quitar bloque">✕</button>'
         + '</div>'
         + '<div class="dias">' + dias + '</div>'
         + '<div class="rango">'
-        +   '<input type="time" step="1800" class="form-control" data-campo="desde" value="' + esc(b.desde) + '">'
-        +   '<span class="sep">→</span>'
-        +   '<input type="time" step="1800" class="form-control" data-campo="hasta" value="' + esc(b.hasta) + '">'
-        +   '<span class="rango-horas">' + Modelo.formatHoras(Modelo.horasBloque(b)) + '</span>'
+        + '<input type="time" step="1800" class="form-control" data-campo="desde" value="' + esc(b.desde) + '">'
+        + '<span class="sep">→</span>'
+        + '<input type="time" step="1800" class="form-control" data-campo="hasta" value="' + esc(b.hasta) + '">'
+        + '<span class="rango-horas">' + Modelo.formatHoras(Modelo.horasBloque(b)) + '</span>'
         + '</div>'
         + '<div class="bloque-resumen">' + esc(resumenBloque(b)) + '</div>'
         + '</div>';
     }).join('');
 
     p.innerHTML =
-        '<div class="error" id="form-error" hidden></div>'
+      '<div class="error" id="form-error" hidden></div>'
 
       + '<div class="fila-campos">'
-      +   '<div class="campo"><label>Nombre</label>'
-      +     '<input type="text" class="form-control" data-campo="nombre" value="' + esc(a.nombre) + '"></div>'
-      +   '<div class="campo"><label>Color</label>'
-      +     '<input type="color" class="form-control" data-campo="color" value="' + esc(a.color) + '"></div>'
-      +   '<div class="campo"><label>Icono</label>'
-      +     '<select class="form-control" data-campo="icono">' + opciones + '</select></div>'
+      + '<div class="campo"><label>Nombre</label>'
+      + '<input type="text" class="form-control" data-campo="nombre" value="' + esc(a.nombre) + '"></div>'
+      + '<div class="campo"><label>Color</label>'
+      + '<input type="color" class="form-control" data-campo="color" value="' + esc(a.color) + '"></div>'
+      + '<div class="campo"><label>Icono</label>'
+      + '<select class="form-control" data-campo="icono">' + opciones + '</select></div>'
       + '</div>'
 
       + '<div class="campo">'
-      +   '<label><input type="checkbox" data-campo="activa"' + (a.activa === false ? '' : ' checked')
-      +     '> Actividad activa</label>'
-      +   '<div class="pista">Al desactivarla deja de pintar y de contar horas, pero conserva su configuración.</div>'
+      + '<label><input type="checkbox" data-campo="activa"' + (a.activa === false ? '' : ' checked')
+      + '> Actividad activa</label>'
+      + '<div class="pista">Al desactivarla deja de pintar y de contar horas, pero conserva su configuración.</div>'
       + '</div>'
 
       + '<div class="campo">'
-      +   '<label>Bloques de horario fijo</label>'
-      +   bloques
-      +   '<button type="button" class="btn btn-bloque" data-anadir-bloque="1">+ Añadir bloque</button>'
-      +   '<div class="pista">Si la hora final es menor o igual que la inicial, el bloque cruza la medianoche '
-      +     'y continúa en el día siguiente (por ejemplo 23:00 → 07:00).</div>'
+      + '<label>Bloques de horario fijo</label>'
+      + bloques
+      + '<button type="button" class="btn btn-bloque" data-anadir-bloque="1">+ Añadir bloque</button>'
+      + '<div class="pista">Si la hora final es menor o igual que la inicial, el bloque cruza la medianoche '
+      + 'y continúa en el día siguiente (por ejemplo 23:00 → 07:00).</div>'
       + '</div>';
   }
 
@@ -505,8 +529,8 @@
   /* ================================================================ */
 
   function init() {
-    $('btn-importar').innerHTML   = icono('icon-import');
-    $('btn-exportar').innerHTML   = icono('icon-export');
+    $('btn-importar').innerHTML = icono('icon-import');
+    $('btn-exportar').innerHTML = icono('icon-export');
     $('btn-configurar').innerHTML = icono('icon-settings');
 
     datos = Store.cargar();

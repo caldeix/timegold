@@ -2,33 +2,40 @@
    Sin Bootstrap: las clases conservan nombres familiares pero el CSS es propio. */
 
 :root {
-  --fondo:        #121212;
-  --superficie:   #1e1e1e;
+  --fondo: #121212;
+  --superficie: #1e1e1e;
   --superficie-2: #262626;
-  --borde:        #000000;
-  --borde-suave:  #3a3a3a;
-  --texto:        #e0e0e0;
-  --texto-tenue:  #9a9a9a;
-  --acento:       #7fd1b9;
-  --peligro:      #e06c60;
-  --media-hora:   #3a3a3a;
+  --borde: #000000;
+  --borde-suave: #3a3a3a;
+  --texto: #e0e0e0;
+  --texto-tenue: #9a9a9a;
+  --acento: #7fd1b9;
+  --peligro: #e06c60;
+  --media-hora: #3a3a3a;
 
   --alt-fila-hora: 44px;
-  --ancho-horas:   54px;
+  --ancho-horas: 54px;
 }
 
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
 
-html, body {
+html,
+body {
   height: 100%;
   margin: 0;
-  overflow: hidden;                 /* nunca scroll global */
+  overflow: hidden;
+  /* nunca scroll global */
   background: var(--fondo);
   color: var(--texto);
   font: 14px/1.4 "Segoe UI", system-ui, Roboto, Arial, sans-serif;
 }
 
-button { font: inherit; color: inherit; }
+button {
+  font: inherit;
+  color: inherit;
+}
 
 .app {
   height: 100vh;
@@ -43,11 +50,14 @@ button { font: inherit; color: inherit; }
 .resumen {
   height: 25%;
   flex: 0 0 25%;
-  position: relative;               /* ancla de .acciones */
+  position: relative;
+  /* ancla de .acciones */
   display: flex;
   flex-direction: column;
-  align-items: center;              /* centrado horizontal */
-  justify-content: center;          /* centrado vertical */
+  align-items: center;
+  /* centrado horizontal */
+  justify-content: center;
+  /* centrado vertical */
   padding: 10px 14px 8px;
   background: var(--superficie);
   border-bottom: 2px solid var(--borde);
@@ -56,24 +66,31 @@ button { font: inherit; color: inherit; }
 
 .marca {
   position: absolute;
-  top: 10px; left: 14px;
+  top: 10px;
+  left: 14px;
   font-size: 11px;
   letter-spacing: .12em;
   text-transform: uppercase;
   color: var(--texto-tenue);
 }
-.marca strong { color: var(--acento); font-weight: 600; }
+
+.marca strong {
+  color: var(--acento);
+  font-weight: 600;
+}
 
 .acciones {
   position: absolute;
-  top: 8px; right: 12px;
+  top: 8px;
+  right: 12px;
   display: flex;
   gap: 6px;
   z-index: 5;
 }
 
 .btn-icono {
-  width: 32px; height: 32px;
+  width: 32px;
+  height: 32px;
   display: grid;
   place-items: center;
   background: var(--superficie-2);
@@ -83,28 +100,50 @@ button { font: inherit; color: inherit; }
   cursor: pointer;
   transition: color .15s, border-color .15s;
 }
-.btn-icono:hover { color: var(--acento); border-color: var(--acento); }
-.btn-icono svg { width: 17px; height: 17px; }
+
+.btn-icono:hover {
+  color: var(--acento);
+  border-color: var(--acento);
+}
+
+.btn-icono svg {
+  width: 17px;
+  height: 17px;
+}
 
 /* Sin ninguna actividad configurada, el boton Configurar se senala solo:
    es el unico sitio desde el que se puede empezar. */
 @keyframes reclama-atencion {
-  0%, 100% { border-color: var(--peligro); box-shadow: 0 0 0 0 rgba(224, 108, 96, .55); }
-  50%      { border-color: #ff9a90;        box-shadow: 0 0 0 4px rgba(224, 108, 96, 0); }
+
+  0%,
+  100% {
+    border-color: var(--peligro);
+    box-shadow: 0 0 0 0 rgba(224, 108, 96, .55);
+  }
+
+  50% {
+    border-color: #ff9a90;
+    box-shadow: 0 0 0 4px rgba(224, 108, 96, 0);
+  }
 }
+
 .btn-icono.reclama {
   border-color: var(--peligro);
   color: var(--peligro);
   animation: reclama-atencion 1.1s ease-in-out infinite;
 }
+
 /* Al pasar el raton se calla y vuelve al comportamiento normal. */
 .btn-icono.reclama:hover {
   color: var(--acento);
   border-color: var(--acento);
   animation: none;
 }
+
 @media (prefers-reduced-motion: reduce) {
-  .btn-icono.reclama { animation: none; }
+  .btn-icono.reclama {
+    animation: none;
+  }
 }
 
 /* Rejilla de categorias: dos columnas en ancho, una en estrecho. */
@@ -112,7 +151,8 @@ button { font: inherit; color: inherit; }
   width: 100%;
   max-width: 1180px;
   margin-top: 22px;
-  overflow-y: auto;                 /* red de seguridad; el 25% se respeta siempre */
+  overflow-y: auto;
+  /* red de seguridad; el 25% se respeta siempre */
   overflow-x: hidden;
   flex: 1 1 auto;
   min-height: 0;
@@ -125,7 +165,9 @@ button { font: inherit; color: inherit; }
 }
 
 @media (max-width: 900px) {
-  .resumen-grid { grid-template-columns: 1fr; }
+  .resumen-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .fila {
@@ -138,7 +180,10 @@ button { font: inherit; color: inherit; }
   overflow: hidden;
   min-height: 38px;
 }
-.fila.inactiva { opacity: .38; }
+
+.fila.inactiva {
+  opacity: .38;
+}
 
 /* Celda de color: padding 0 para que el area toque los bordes sin huecos. */
 .fila-color {
@@ -151,7 +196,11 @@ button { font: inherit; color: inherit; }
   place-items: center;
   color: var(--texto-tenue);
 }
-.fila-icono svg { width: 16px; height: 16px; }
+
+.fila-icono svg {
+  width: 16px;
+  height: 16px;
+}
 
 .fila-txt {
   padding: 4px 8px;
@@ -160,12 +209,14 @@ button { font: inherit; color: inherit; }
   flex-direction: column;
   justify-content: center;
 }
+
 .fila-nombre {
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .fila-detalle {
   font-size: 11px;
   color: var(--texto-tenue);
@@ -184,6 +235,7 @@ button { font: inherit; color: inherit; }
   background: rgba(0, 0, 0, .22);
   white-space: nowrap;
 }
+
 .fila-horas small {
   display: block;
   font-size: 10px;
@@ -207,13 +259,20 @@ button { font: inherit; color: inherit; }
   border: 1px solid var(--borde) !important;
   border-radius: 3px;
 }
-.libre svg { width: 20px; height: 20px; color: var(--acento); }
+
+.libre svg {
+  width: 20px;
+  height: 20px;
+  color: var(--acento);
+}
+
 .libre-etq {
   font-size: 12px;
   letter-spacing: .1em;
   text-transform: uppercase;
   color: var(--texto-tenue);
 }
+
 .libre-valor {
   font-size: 26px;
   font-weight: 700;
@@ -221,7 +280,11 @@ button { font: inherit; color: inherit; }
   font-variant-numeric: tabular-nums;
   line-height: 1;
 }
-.libre-valor.negativo { color: var(--peligro); }
+
+.libre-valor.negativo {
+  color: var(--peligro);
+}
+
 .libre-nota {
   font-size: 11px;
   color: var(--texto-tenue);
@@ -235,7 +298,8 @@ button { font: inherit; color: inherit; }
 .matriz-wrap {
   height: 75%;
   flex: 1 1 75%;
-  overflow-y: auto;                 /* scroll independiente */
+  overflow-y: auto;
+  /* scroll independiente */
   overflow-x: hidden;
   background: var(--fondo);
 }
@@ -245,7 +309,8 @@ button { font: inherit; color: inherit; }
   grid-template-columns: var(--ancho-horas) repeat(7, minmax(0, 1fr));
 }
 
-.mx-esq, .mx-dia {
+.mx-esq,
+.mx-dia {
   position: sticky;
   top: 0;
   z-index: 3;
@@ -258,7 +323,11 @@ button { font: inherit; color: inherit; }
   text-transform: uppercase;
   color: var(--texto-tenue);
 }
-.mx-esq { left: 0; z-index: 4; }
+
+.mx-esq {
+  left: 0;
+  z-index: 4;
+}
 
 .mx-hora {
   position: sticky;
@@ -303,9 +372,35 @@ button { font: inherit; color: inherit; }
 .slot {
   flex: 1 1 50%;
   min-height: 0;
+  display: flex;
+  /* centra la etiqueta vertical y horizontalmente */
+  align-items: center;
+  overflow: hidden;
 }
+
 .slot:first-child {
-  border-bottom: 1px dashed var(--media-hora);   /* la linea de las y media */
+  border-bottom: 1px dashed var(--media-hora);
+  /* la linea de las y media */
+}
+
+/* Nombre de la actividad, solo en la franja central de su tramo. Con dos
+   ocupantes hay dos etiquetas, una por mitad, alineadas con el degradado. */
+.slot-etq {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 3px;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  line-height: 1;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, .85);
+  /* legible sobre cualquier color */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  pointer-events: none;
+  /* el tooltip del slot sigue funcionando */
 }
 
 /* ---------------------------------------------------------------- */
@@ -314,7 +409,9 @@ button { font: inherit; color: inherit; }
 
 .aviso {
   position: fixed;
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   z-index: 40;
   padding: 7px 14px;
   background: #4a2020;
@@ -323,7 +420,10 @@ button { font: inherit; color: inherit; }
   font-size: 12px;
   text-align: center;
 }
-.aviso[hidden] { display: none; }
+
+.aviso[hidden] {
+  display: none;
+}
 
 /* ---------------------------------------------------------------- */
 /* Modal                                                              */
@@ -339,7 +439,10 @@ button { font: inherit; color: inherit; }
   background: rgba(0, 0, 0, .72);
   padding: 20px;
 }
-.modal.abierto { display: flex; }
+
+.modal.abierto {
+  display: flex;
+}
 
 .modal-dialogo {
   width: 100%;
@@ -354,7 +457,8 @@ button { font: inherit; color: inherit; }
   overflow: hidden;
 }
 
-.modal-cab, .modal-pie {
+.modal-cab,
+.modal-pie {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -363,9 +467,20 @@ button { font: inherit; color: inherit; }
   background: var(--superficie-2);
   flex: 0 0 auto;
 }
-.modal-cab { border-bottom: 1px solid var(--borde); }
-.modal-pie { border-top: 1px solid var(--borde); }
-.modal-cab h2 { margin: 0; font-size: 16px; font-weight: 600; }
+
+.modal-cab {
+  border-bottom: 1px solid var(--borde);
+}
+
+.modal-pie {
+  border-top: 1px solid var(--borde);
+}
+
+.modal-cab h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
 
 .modal-cuerpo {
   display: grid;
@@ -375,8 +490,12 @@ button { font: inherit; color: inherit; }
   flex: 1 1 auto;
   min-height: 0;
 }
+
 @media (max-width: 780px) {
-  .modal-cuerpo { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .modal-cuerpo {
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+  }
 }
 
 .panel-lista {
@@ -385,6 +504,7 @@ button { font: inherit; color: inherit; }
   overflow-y: auto;
   background: #1a1a1a;
 }
+
 .panel-form {
   padding: 14px 16px;
   overflow-y: auto;
@@ -402,20 +522,42 @@ button { font: inherit; color: inherit; }
   border-radius: 4px;
   cursor: pointer;
 }
-.lista-item:hover { border-color: var(--borde-suave); }
-.lista-item.sel { border-color: var(--acento); background: #23302c; }
-.lista-item.inactiva .lista-nombre { opacity: .4; text-decoration: line-through; }
-.lista-swatch { width: 12px; height: 22px; border-radius: 2px; }
+
+.lista-item:hover {
+  border-color: var(--borde-suave);
+}
+
+.lista-item.sel {
+  border-color: var(--acento);
+  background: #23302c;
+}
+
+.lista-item.inactiva .lista-nombre {
+  opacity: .4;
+  text-decoration: line-through;
+}
+
+.lista-swatch {
+  width: 12px;
+  height: 22px;
+  border-radius: 2px;
+}
+
 .lista-nombre {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   font-size: 13px;
 }
-.lista-acc { display: flex; gap: 2px; }
+
+.lista-acc {
+  display: flex;
+  gap: 2px;
+}
 
 .mini {
-  width: 22px; height: 22px;
+  width: 22px;
+  height: 22px;
   display: grid;
   place-items: center;
   background: transparent;
@@ -427,11 +569,22 @@ button { font: inherit; color: inherit; }
   line-height: 1;
   padding: 0;
 }
-.mini:hover { color: var(--acento); border-color: var(--acento); }
-.mini.del:hover { color: var(--peligro); border-color: var(--peligro); }
 
-.campo { margin-bottom: 12px; }
-.campo > label {
+.mini:hover {
+  color: var(--acento);
+  border-color: var(--acento);
+}
+
+.mini.del:hover {
+  color: var(--peligro);
+  border-color: var(--peligro);
+}
+
+.campo {
+  margin-bottom: 12px;
+}
+
+.campo>label {
   display: block;
   margin-bottom: 4px;
   font-size: 11px;
@@ -448,15 +601,29 @@ button { font: inherit; color: inherit; }
   border-radius: 4px;
   color: var(--texto);
 }
-.form-control:focus { outline: none; border-color: var(--acento); }
-input[type="color"].form-control { padding: 2px; height: 34px; cursor: pointer; }
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--acento);
+}
+
+input[type="color"].form-control {
+  padding: 2px;
+  height: 34px;
+  cursor: pointer;
+}
 
 .fila-campos {
   display: grid;
   grid-template-columns: minmax(0, 1fr) 96px 150px;
   gap: 10px;
 }
-@media (max-width: 620px) { .fila-campos { grid-template-columns: 1fr; } }
+
+@media (max-width: 620px) {
+  .fila-campos {
+    grid-template-columns: 1fr;
+  }
+}
 
 .bloque {
   padding: 9px;
@@ -465,12 +632,14 @@ input[type="color"].form-control { padding: 2px; height: 34px; cursor: pointer; 
   border: 1px solid var(--borde-suave);
   border-radius: 5px;
 }
+
 .bloque-cab {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-bottom: 7px;
 }
+
 .bloque-cab span {
   font-size: 11px;
   color: var(--texto-tenue);
@@ -478,12 +647,27 @@ input[type="color"].form-control { padding: 2px; height: 34px; cursor: pointer; 
   letter-spacing: .08em;
 }
 
-.dias { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+.dias {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
 .dia-chk {
   position: relative;
-  width: 30px; height: 28px;
+  width: 30px;
+  height: 28px;
 }
-.dia-chk input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
+
+.dia-chk input {
+  position: absolute;
+  opacity: 0;
+  inset: 0;
+  cursor: pointer;
+  margin: 0;
+}
+
 .dia-chk span {
   display: grid;
   place-items: center;
@@ -496,15 +680,28 @@ input[type="color"].form-control { padding: 2px; height: 34px; cursor: pointer; 
   color: var(--texto-tenue);
   pointer-events: none;
 }
-.dia-chk input:checked + span {
+
+.dia-chk input:checked+span {
   background: var(--acento);
   border-color: var(--acento);
   color: #10201c;
 }
 
-.rango { display: flex; align-items: center; gap: 8px; }
-.rango input { flex: 1 1 0; min-width: 0; }
-.rango .sep { color: var(--texto-tenue); }
+.rango {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rango input {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.rango .sep {
+  color: var(--texto-tenue);
+}
+
 /* Frase en cristiano de lo que hace el bloque: quita toda la aritmetica mental
    de los horarios que cruzan la medianoche. */
 .bloque-resumen {
@@ -530,15 +727,28 @@ input[type="color"].form-control { padding: 2px; height: 34px; cursor: pointer; 
   border-radius: 5px;
   cursor: pointer;
 }
-.btn:hover { border-color: var(--acento); color: var(--acento); }
+
+.btn:hover {
+  border-color: var(--acento);
+  color: var(--acento);
+}
+
 .btn-primario {
   background: var(--acento);
   border-color: var(--acento);
   color: #10201c;
   font-weight: 600;
 }
-.btn-primario:hover { filter: brightness(1.1); color: #10201c; }
-.btn-bloque { width: 100%; margin-top: 2px; }
+
+.btn-primario:hover {
+  filter: brightness(1.1);
+  color: #10201c;
+}
+
+.btn-bloque {
+  width: 100%;
+  margin-top: 2px;
+}
 
 .pista {
   font-size: 11px;
@@ -556,7 +766,10 @@ input[type="color"].form-control { padding: 2px; height: 34px; cursor: pointer; 
   font-size: 12px;
   white-space: pre-line;
 }
-.error[hidden] { display: none; }
+
+.error[hidden] {
+  display: none;
+}
 
 .vacio {
   padding: 30px 12px;
