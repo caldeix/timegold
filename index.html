@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TiempoEsOro — Planificador semanal</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- ============ 25% — Resumen ============ -->
+  <section class="resumen">
+    <div class="marca">Tiempo<strong>EsOro</strong> · 168 h</div>
+
+    <div class="acciones">
+      <button type="button" class="btn-icono" id="btn-importar" title="Importar JSON" aria-label="Importar JSON"></button>
+      <button type="button" class="btn-icono" id="btn-exportar" title="Exportar JSON" aria-label="Exportar JSON"></button>
+      <button type="button" class="btn-icono" id="btn-configurar" title="Configurar" aria-label="Configurar"></button>
+    </div>
+
+    <div class="resumen-cuerpo">
+      <div class="resumen-grid" id="resumen-grid"></div>
+    </div>
+
+    <!-- Tiempo Libre: fila propia a todo el ancho. Calculado, nunca editable. -->
+    <div class="libre">
+      <span id="libre-icono"></span>
+      <span class="libre-etq">Tiempo Libre</span>
+      <span class="libre-valor" id="libre-valor">—</span>
+      <span class="libre-nota" id="libre-nota"></span>
+    </div>
+  </section>
+
+  <!-- ============ 75% — Matriz semanal ============ -->
+  <section class="matriz-wrap">
+    <div class="matriz" id="matriz"></div>
+  </section>
+
+</div>
+
+<input type="file" id="file-import" accept=".json,application/json" hidden>
+
+<div class="aviso" id="aviso" hidden></div>
+
+<!-- ============ Modal Configurar ============ -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
+  <div class="modal-dialogo">
+
+    <div class="modal-cab">
+      <h2 id="modal-titulo">Configurar actividades</h2>
+      <button type="button" class="mini" id="btn-cerrar" title="Cerrar" aria-label="Cerrar">✕</button>
+    </div>
+
+    <div class="modal-cuerpo">
+      <aside class="panel-lista">
+        <div id="lista-actividades"></div>
+        <button type="button" class="btn btn-bloque" id="btn-nueva">+ Nueva actividad</button>
+      </aside>
+      <div class="panel-form" id="panel-form"></div>
+    </div>
+
+    <div class="modal-pie">
+      <span class="pista" id="pie-pista"></span>
+      <span>
+        <button type="button" class="btn" id="btn-cancelar">Cancelar</button>
+        <button type="button" class="btn btn-primario" id="btn-aplicar">Aplicar cambios</button>
+      </span>
+    </div>
+
+  </div>
+</div>
+
+<!-- El orden importa: iconos y semilla antes que el modelo, y app.js al final. -->
+<script src="iconos.js" charset="utf-8"></script>
+<script src="datos.js" charset="utf-8"></script>
+<script src="modelo.js" charset="utf-8"></script>
+<script src="store.js" charset="utf-8"></script>
+<script src="app.js" charset="utf-8"></script>
+
+</body>
+</html>

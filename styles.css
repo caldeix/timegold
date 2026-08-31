@@ -1,0 +1,545 @@
+/* TiempoEsOro - Dark Mode nativo, layout 25/75 sin scroll global.
+   Sin Bootstrap: las clases conservan nombres familiares pero el CSS es propio. */
+
+:root {
+  --fondo:        #121212;
+  --superficie:   #1e1e1e;
+  --superficie-2: #262626;
+  --borde:        #000000;
+  --borde-suave:  #3a3a3a;
+  --texto:        #e0e0e0;
+  --texto-tenue:  #9a9a9a;
+  --acento:       #7fd1b9;
+  --peligro:      #e06c60;
+  --media-hora:   #3a3a3a;
+
+  --alt-fila-hora: 44px;
+  --ancho-horas:   54px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;                 /* nunca scroll global */
+  background: var(--fondo);
+  color: var(--texto);
+  font: 14px/1.4 "Segoe UI", system-ui, Roboto, Arial, sans-serif;
+}
+
+button { font: inherit; color: inherit; }
+
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ---------------------------------------------------------------- */
+/* BLOQUE SUPERIOR - 25% - Resumen                                    */
+/* ---------------------------------------------------------------- */
+
+.resumen {
+  height: 25%;
+  flex: 0 0 25%;
+  position: relative;               /* ancla de .acciones */
+  display: flex;
+  flex-direction: column;
+  align-items: center;              /* centrado horizontal */
+  justify-content: center;          /* centrado vertical */
+  padding: 10px 14px 8px;
+  background: var(--superficie);
+  border-bottom: 2px solid var(--borde);
+  overflow: hidden;
+}
+
+.marca {
+  position: absolute;
+  top: 10px; left: 14px;
+  font-size: 11px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+.marca strong { color: var(--acento); font-weight: 600; }
+
+.acciones {
+  position: absolute;
+  top: 8px; right: 12px;
+  display: flex;
+  gap: 6px;
+  z-index: 5;
+}
+
+.btn-icono {
+  width: 32px; height: 32px;
+  display: grid;
+  place-items: center;
+  background: var(--superficie-2);
+  border: 1px solid var(--borde-suave);
+  border-radius: 6px;
+  color: var(--texto-tenue);
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+}
+.btn-icono:hover { color: var(--acento); border-color: var(--acento); }
+.btn-icono svg { width: 17px; height: 17px; }
+
+/* Rejilla de categorias: dos columnas en ancho, una en estrecho. */
+.resumen-cuerpo {
+  width: 100%;
+  max-width: 1180px;
+  margin-top: 22px;
+  overflow-y: auto;                 /* red de seguridad; el 25% se respeta siempre */
+  overflow-x: hidden;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.resumen-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 14px;
+}
+
+@media (max-width: 900px) {
+  .resumen-grid { grid-template-columns: 1fr; }
+}
+
+.fila {
+  display: grid;
+  grid-template-columns: 14px 24px minmax(0, 1fr) auto;
+  align-items: stretch;
+  background: var(--superficie-2);
+  border: 1px solid var(--borde) !important;
+  border-radius: 3px;
+  overflow: hidden;
+  min-height: 38px;
+}
+.fila.inactiva { opacity: .38; }
+
+/* Celda de color: padding 0 para que el area toque los bordes sin huecos. */
+.fila-color {
+  padding: 0 !important;
+  border-right: 1px solid var(--borde) !important;
+}
+
+.fila-icono {
+  display: grid;
+  place-items: center;
+  color: var(--texto-tenue);
+}
+.fila-icono svg { width: 16px; height: 16px; }
+
+.fila-txt {
+  padding: 4px 8px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.fila-nombre {
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.fila-detalle {
+  font-size: 11px;
+  color: var(--texto-tenue);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fila-horas {
+  padding: 4px 10px;
+  display: grid;
+  place-items: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+  border-left: 1px solid var(--borde) !important;
+  background: rgba(0, 0, 0, .22);
+  white-space: nowrap;
+}
+.fila-horas small {
+  display: block;
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--texto-tenue);
+}
+
+/* Tiempo Libre: fila propia a todo el ancho. Es el numero por el que existe
+   la aplicacion, asi que manda visualmente. */
+.libre {
+  width: 100%;
+  max-width: 1180px;
+  margin-top: 7px;
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 7px 14px;
+  background: var(--superficie-2);
+  border: 1px solid var(--borde) !important;
+  border-radius: 3px;
+}
+.libre svg { width: 20px; height: 20px; color: var(--acento); }
+.libre-etq {
+  font-size: 12px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+.libre-valor {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--acento);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.libre-valor.negativo { color: var(--peligro); }
+.libre-nota {
+  font-size: 11px;
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------------------------------------------------------------- */
+/* BLOQUE INFERIOR - 75% - Matriz semanal                             */
+/* ---------------------------------------------------------------- */
+
+.matriz-wrap {
+  height: 75%;
+  flex: 1 1 75%;
+  overflow-y: auto;                 /* scroll independiente */
+  overflow-x: hidden;
+  background: var(--fondo);
+}
+
+.matriz {
+  display: grid;
+  grid-template-columns: var(--ancho-horas) repeat(7, minmax(0, 1fr));
+}
+
+.mx-esq, .mx-dia {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--superficie);
+  border: 1px solid var(--borde) !important;
+  padding: 6px 4px;
+  text-align: center;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+.mx-esq { left: 0; z-index: 4; }
+
+.mx-hora {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+  background: var(--superficie);
+  border: 1px solid var(--borde) !important;
+  height: var(--alt-fila-hora);
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  color: var(--texto-tenue);
+  font-variant-numeric: tabular-nums;
+}
+
+.mx-celda {
+  height: var(--alt-fila-hora);
+  border: 1px solid var(--borde) !important;
+  display: flex;
+  flex-direction: column;
+  background: #171717;
+}
+
+/* La matriz arranca a las 06:00 y las horas previas van al final. Esta marca
+   senala donde el listado da la vuelta a medianoche. */
+.mx-corte {
+  border-top: 2px solid var(--acento) !important;
+}
+
+/* Marca "+1": esa fila es la madrugada del dia natural siguiente. */
+.mx-sig {
+  color: var(--acento);
+  font-size: 9px;
+  margin-left: 1px;
+  vertical-align: super;
+  line-height: 0;
+}
+
+/* Dos slots apilados = las dos medias horas. Cada mitad se pinta sola, que es
+   lo que permite un solape bicolor (partido en vertical) en una media hora y
+   un color solido distinto en la otra. */
+.slot {
+  flex: 1 1 50%;
+  min-height: 0;
+}
+.slot:first-child {
+  border-bottom: 1px dashed var(--media-hora);   /* la linea de las y media */
+}
+
+/* ---------------------------------------------------------------- */
+/* Aviso de almacenamiento no disponible                              */
+/* ---------------------------------------------------------------- */
+
+.aviso {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 40;
+  padding: 7px 14px;
+  background: #4a2020;
+  border-top: 1px solid var(--peligro);
+  color: #f0c8c4;
+  font-size: 12px;
+  text-align: center;
+}
+.aviso[hidden] { display: none; }
+
+/* ---------------------------------------------------------------- */
+/* Modal                                                              */
+/* ---------------------------------------------------------------- */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, .72);
+  padding: 20px;
+}
+.modal.abierto { display: flex; }
+
+.modal-dialogo {
+  width: 100%;
+  max-width: 940px;
+  max-height: 88vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--superficie);
+  border: 1px solid var(--borde-suave);
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, .6);
+  overflow: hidden;
+}
+
+.modal-cab, .modal-pie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 16px;
+  background: var(--superficie-2);
+  flex: 0 0 auto;
+}
+.modal-cab { border-bottom: 1px solid var(--borde); }
+.modal-pie { border-top: 1px solid var(--borde); }
+.modal-cab h2 { margin: 0; font-size: 16px; font-weight: 600; }
+
+.modal-cuerpo {
+  display: grid;
+  grid-template-columns: 290px minmax(0, 1fr);
+  gap: 0;
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+@media (max-width: 780px) {
+  .modal-cuerpo { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+}
+
+.panel-lista {
+  border-right: 1px solid var(--borde);
+  padding: 12px;
+  overflow-y: auto;
+  background: #1a1a1a;
+}
+.panel-form {
+  padding: 14px 16px;
+  overflow-y: auto;
+}
+
+.lista-item {
+  display: grid;
+  grid-template-columns: 12px auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 7px;
+  margin-bottom: 5px;
+  background: var(--superficie-2);
+  border: 1px solid transparent;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.lista-item:hover { border-color: var(--borde-suave); }
+.lista-item.sel { border-color: var(--acento); background: #23302c; }
+.lista-item.inactiva .lista-nombre { opacity: .4; text-decoration: line-through; }
+.lista-swatch { width: 12px; height: 22px; border-radius: 2px; }
+.lista-nombre {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+}
+.lista-acc { display: flex; gap: 2px; }
+
+.mini {
+  width: 22px; height: 22px;
+  display: grid;
+  place-items: center;
+  background: transparent;
+  border: 1px solid var(--borde-suave);
+  border-radius: 3px;
+  color: var(--texto-tenue);
+  cursor: pointer;
+  font-size: 12px;
+  line-height: 1;
+  padding: 0;
+}
+.mini:hover { color: var(--acento); border-color: var(--acento); }
+.mini.del:hover { color: var(--peligro); border-color: var(--peligro); }
+
+.campo { margin-bottom: 12px; }
+.campo > label {
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--texto-tenue);
+}
+
+.form-control {
+  width: 100%;
+  padding: 7px 9px;
+  background: #141414;
+  border: 1px solid var(--borde-suave);
+  border-radius: 4px;
+  color: var(--texto);
+}
+.form-control:focus { outline: none; border-color: var(--acento); }
+input[type="color"].form-control { padding: 2px; height: 34px; cursor: pointer; }
+
+.fila-campos {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 96px 150px;
+  gap: 10px;
+}
+@media (max-width: 620px) { .fila-campos { grid-template-columns: 1fr; } }
+
+.bloque {
+  padding: 9px;
+  margin-bottom: 8px;
+  background: #171717;
+  border: 1px solid var(--borde-suave);
+  border-radius: 5px;
+}
+.bloque-cab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 7px;
+}
+.bloque-cab span {
+  font-size: 11px;
+  color: var(--texto-tenue);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+
+.dias { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 8px; }
+.dia-chk {
+  position: relative;
+  width: 30px; height: 28px;
+}
+.dia-chk input { position: absolute; opacity: 0; inset: 0; cursor: pointer; margin: 0; }
+.dia-chk span {
+  display: grid;
+  place-items: center;
+  height: 100%;
+  background: #141414;
+  border: 1px solid var(--borde-suave);
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--texto-tenue);
+  pointer-events: none;
+}
+.dia-chk input:checked + span {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: #10201c;
+}
+
+.rango { display: flex; align-items: center; gap: 8px; }
+.rango input { flex: 1 1 0; min-width: 0; }
+.rango .sep { color: var(--texto-tenue); }
+/* Frase en cristiano de lo que hace el bloque: quita toda la aritmetica mental
+   de los horarios que cruzan la medianoche. */
+.bloque-resumen {
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid var(--borde-suave);
+  font-size: 12px;
+  color: var(--acento);
+  font-variant-numeric: tabular-nums;
+}
+
+.rango-horas {
+  font-size: 11px;
+  color: var(--texto-tenue);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.btn {
+  padding: 8px 15px;
+  background: var(--superficie-2);
+  border: 1px solid var(--borde-suave);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.btn:hover { border-color: var(--acento); color: var(--acento); }
+.btn-primario {
+  background: var(--acento);
+  border-color: var(--acento);
+  color: #10201c;
+  font-weight: 600;
+}
+.btn-primario:hover { filter: brightness(1.1); color: #10201c; }
+.btn-bloque { width: 100%; margin-top: 2px; }
+
+.pista {
+  font-size: 11px;
+  color: var(--texto-tenue);
+  margin-top: 4px;
+}
+
+.error {
+  padding: 9px 11px;
+  margin-bottom: 12px;
+  background: #3a1c1c;
+  border: 1px solid var(--peligro);
+  border-radius: 5px;
+  color: #f0c8c4;
+  font-size: 12px;
+  white-space: pre-line;
+}
+.error[hidden] { display: none; }
+
+.vacio {
+  padding: 30px 12px;
+  text-align: center;
+  color: var(--texto-tenue);
+  font-size: 13px;
+}
