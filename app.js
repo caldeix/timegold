@@ -155,6 +155,9 @@
         out.push('<div class="mx-celda' + corte + '">');
         out.push(slotHtml(calc, porId, dReal, h * 2));
         out.push(slotHtml(calc, porId, dReal, h * 2 + 1));
+        // Al cruzar la medianoche la columna ya es del dia natural siguiente:
+        // la del lunes pasa a ser martes. Se rotula para no tener que deducirlo.
+        if (corte) out.push('<span class="mx-dia-sig">' + DIAS_CORTOS[dReal] + '</span>');
         out.push('</div>');
       }
     }
